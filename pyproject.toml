@@ -1,0 +1,25 @@
+[project]
+name = "mmmbench"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "cidereval",
+    "dotenv>=0.9.9",
+    "openai>=1.99.9",
+    "pandas>=2.3.1",
+    "rouge>=1.0.1",
+    "scikit-learn>=1.7.1",
+    "tabulate>=0.9.0",
+    "tqdm>=4.67.1",
+    "typing-extensions>=4.14.1",
+]
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
+[tool.uv.sources]
+cidereval = { git = "https://github.com/Moenupa/cider.git" }
