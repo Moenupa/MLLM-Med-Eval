@@ -1,4 +1,5 @@
 import pandas as pd
+import os.path as osp
 
 from .constants import GT_KEY, MAX_WORKER_PER_JSON, PROBLEM_KEY, ModelBasedMetric
 from .llm_rater import LLMRater, append_cache, cache_file, load_cache, make_key
@@ -29,7 +30,7 @@ def compute_model_based_metric(
 
     meta_info = {
         "json_path": json_path,
-        "model": model_name,
+        "model": f"{osp.dirname(json_path)}_{model_name}".replace("output_", ""),
     }
 
     cache_path = cache_file(json_path, model_name, metric_name)

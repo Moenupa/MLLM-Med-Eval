@@ -1,3 +1,4 @@
+import os.path as osp
 import warnings
 
 import pandas as pd
@@ -54,7 +55,7 @@ def compute_nlp_metrics(
 
     meta_info = {
         "json_path": json_path,
-        "model": model_name,
+        "model": f"{osp.dirname(json_path)}_{model_name}".replace("output_", ""),
     }
     if metric_name == ModelFreeMetric.ExactMatch:
         return meta_info | {

@@ -1,6 +1,7 @@
 import os
 import pickle as pkl
 from glob import glob
+import sys
 
 from tqdm.contrib.concurrent import process_map
 
@@ -24,6 +25,7 @@ def test_compute_metrics():
         desc="Computing metrics",
         unit="metric",
         leave=True,
+        file=sys.stdout,
     )
 
     out_file = "nlp_results.pkl"

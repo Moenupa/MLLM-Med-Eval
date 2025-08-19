@@ -1,5 +1,6 @@
 import pickle as pkl
 from glob import glob
+import sys
 
 from tqdm.contrib.concurrent import process_map
 
@@ -23,6 +24,7 @@ if __name__ == "__main__":
         chunksize=1,
         desc="Computing model-based metrics",
         unit="metric",
+        file=sys.stdout,
     )
 
     with open("llm_results.pkl", "wb") as f:

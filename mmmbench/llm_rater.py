@@ -47,7 +47,7 @@ def _build_prompt(
 
     parts = [header, task]
     if context:
-        parts.append(f"Context (if relevant):\n{context}")
+        parts.append(f"Context:\n{context}")
     parts.append(f"Ground truth:\n{gt}")
     parts.append(f"Prediction:\n{pred}")
     parts.append("Only provide the structured result as requested (score and reason).")
