@@ -6,6 +6,7 @@ from glob import glob
 import pandas as pd
 
 from mmmbench.constants import ModelBasedMetric, ModelFreeMetric
+from mmmbench.plot import plot_radar
 
 
 def prefix_stepn(s: str) -> str:
@@ -83,4 +84,27 @@ if __name__ == "__main__":
     # )
 
     df.to_json("readable_mllm_med_results.json", indent=4)
-    print(df)
+
+    # use with to print dataframe without max width length
+    with pd.option_context("display.max_colwidth", None, "display.max_rows", None):
+        print(df)
+
+    plot_radar(
+        df,
+        model_include=[
+            "ascend_Lingshu-7B",
+            "lingshu_trained_step10k",
+            "ascend_Qwen2.5-VL-7B-Instruct",
+            "Qwen2.5-VL-7B-Instruct-step10k",
+        ],
+        model_exclude=[
+            "step4k",
+            "step6k",
+            "step8k",
+            "ascend_Lingshu-7B-iter1447",
+            "ascend_Qwen2.5-VL-7B-Instruct-iter3557",
+            "lingshu_trained_step4k",
+            "lingshu_trained_step6k",
+            "lingshu_trained_step8k",
+        ],
+    )
