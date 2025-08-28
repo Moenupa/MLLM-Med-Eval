@@ -1,36 +1,46 @@
 import os.path as osp
+import sys
 import warnings
 
-import pandas as pd
-from cidereval import cider, ciderD
+from cidereval import cider
 from rouge import Rouge
 from sklearn.metrics import accuracy_score
 
-from .constants import GT_KEY, PROBLEM_KEY, ModelFreeMetric
+from .constants import GT_KEY
+from .io import read_answers
+from .metrics import ModelFreeMetric
 
 warnings.filterwarnings("ignore", category=UserWarning)
+
+
+def filter_natural_lang(pred: str, gt: str, incl: bool = False) -> str:
+    pass
 
 
 def compute_cider(gts: list[str], preds: list[str]) -> float:
     return cider(predictions=preds, references=[[g.lower()] for g in gts])["avg_score"]
 
 
-def compute_rouge(gts: list[str], preds: list[str]) -> float:
-    scorer = Rouge()
-    rougeL = scorer.get_scores(
-        hyps=preds,
-        refs=gts,
-        avg=True,
-        ignore_empty=True,
-    )
+def compute_rouge(gts: list[str], preds: list[str]) -> float | None:
+    # a fix to 'maximum recursion depth exceeded in comparison'
+    # set this larger if you encounter the same error
+    # see https://github.com/pltrdy/rouge/issues/19
+    sys.setrecursionlimit(2000 * 2000 + 10)
 
-    return rougeL["rouge-l"]["f"]
+    scorer = Rouge(metrics=["rouge-l"])
+    try:
+        rougeL = scorer.get_scores(
+            hyps=preds,
+            refs=gts,
+            avg=True,
+            ignore_empty=True,
+        )
 
+        return rougeL["rouge-l"]["f"]
+    except Exception as e:
+        print(e)
 
-def lingshu_cleaning(text: str) -> str:
-    if len(text) == 2 and text.endswith("."):
-        return text[:-1]
-    return text
+    return None
 
 
 def compute_nlp_metrics(
@@ -43,15 +53,7 @@ def compute_nlp_metrics(
     # column -> models
     # row -> data samples
     # get avg score for each of the models
-    df = pd.read_json(json_path, lines=False)
-
-    assert GT_KEY in df.columns
-    assert model_name in df.columns
-
-    df[model_name] = df[model_name].apply(str.lower)
-    df[GT_KEY] = df[GT_KEY].apply(str.lower)
-    if "mmmu_medical.json" in json_path:
-        df[model_name] = df[model_name].apply(lingshu_cleaning)
+    df = read_answers(json_path, model_name)
 
     meta_info = {
         "json_path": json_path,

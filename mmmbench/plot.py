@@ -1,11 +1,13 @@
-from .constants import ModelFreeMetric, ModelBasedMetric
-import pandas as pd
+import re
+
 import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
+import pandas as pd
+import seaborn as sns
 
+from .metrics import GPTMetric, ModelFreeMetric
 
-METRICS = [c.value for c in ModelBasedMetric] + [c.value for c in ModelFreeMetric]
+METRICS = [c.value for c in GPTMetric] + [c.value for c in ModelFreeMetric]
 N_METRICS = len(METRICS)
 LINGSHU_BASELINE = {
     "mimic-cxr-vqa_test": {
@@ -28,16 +30,14 @@ def normalize_scores(scale: tuple[int, int], value: float) -> float:
 
 def plot_radar(
     df: pd.DataFrame,
-    scaler: dict[ModelBasedMetric | ModelFreeMetric, tuple[int, int]] = {
-        ModelBasedMetric.Acc: (1, 5),
-        ModelBasedMetric.InstFollow: (1, 5),
+    scaler: dict[GPTMetric | ModelFreeMetric, tuple[int, int]] = {
+        GPTMetric.Acc: (1, 5),
+        GPTMetric.InstFollow: (1, 5),
         ModelFreeMetric.ROUGE: (0, 100),
         ModelFreeMetric.CIDEr: (0, 400),
         ModelFreeMetric.ExactMatch: (0, 100),
     },
-    baseline: dict[
-        str, dict[ModelBasedMetric | ModelFreeMetric, float]
-    ] = LINGSHU_BASELINE,
+    baseline: dict[str, dict[GPTMetric | ModelFreeMetric, float]] = LINGSHU_BASELINE,
     model_include: list[str] | None = None,
     model_exclude: list[str] | None = None,
 ):
@@ -63,7 +63,9 @@ def plot_radar(
 
         # Plot models
         for model in model_include:
-            if model_exclude is not None and model in model_exclude:
+            if model_exclude is not None and any(
+                re.match(regex, model) for regex in model_exclude
+            ):
                 continue
 
             try:

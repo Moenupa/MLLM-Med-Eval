@@ -1,7 +1,7 @@
 import os
 import pickle as pkl
-from glob import glob
 import sys
+from glob import glob
 
 from tqdm.contrib.concurrent import process_map
 
@@ -9,7 +9,7 @@ from mmmbench.constants import PATH_RE_TO_MODEL_MAPPING
 from mmmbench.metric_nlp import ModelFreeMetric, compute_nlp_metrics
 
 
-def test_compute_metrics():
+def compute_metrics():
     # model free metrics
     results: list[dict] = process_map(
         compute_nlp_metrics,
@@ -38,4 +38,4 @@ def test_compute_metrics():
 
 
 if __name__ == "__main__":
-    test_compute_metrics()
+    compute_metrics()
