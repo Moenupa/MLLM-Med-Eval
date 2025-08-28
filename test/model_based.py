@@ -1,5 +1,6 @@
 import pickle as pkl
 import sys
+import os
 from glob import glob
 
 from tqdm.contrib.concurrent import process_map
@@ -21,7 +22,7 @@ if __name__ == "__main__":
     results = process_map(
         compute_model_based_metric,
         args_list,
-        max_workers=64,
+        max_workers=max(len(args_list), os.cpu_count()),
         chunksize=1,
         desc="Computing model-based metrics",
         unit="metric",

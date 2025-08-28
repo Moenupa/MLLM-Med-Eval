@@ -1,7 +1,5 @@
-import os.path as osp
-
 from .constants import GT_KEY, MAX_WORKER_PER_JSON, PROBLEM_KEY
-from .io import read_answers
+from .io import read_answers, unique_model_id
 from .llm_rater import LLMRater, append_cache, cache_file, load_cache, make_key
 from .metrics import GPTMetric, ScoreBinary
 
@@ -16,7 +14,7 @@ def compute_model_based_metric(
 
     meta_info = {
         "json_path": json_path,
-        "model": f"{osp.dirname(json_path)}_{model_name}".replace("output_", ""),
+        "model": unique_model_id(json_path, model_name),
     }
 
     cache_path = cache_file(json_path, model_name, metric_name)
@@ -31,7 +29,7 @@ def compute_model_based_metric(
 
         gt = row[GT_KEY]
         pred = row[model_name]
-        context_val = row[PROBLEM_KEY]
+        context = row[PROBLEM_KEY]
 
         # cached score, unique by make_key()
         key = make_key(int(idx), str(gt), str(pred), metric_name)
@@ -44,7 +42,7 @@ def compute_model_based_metric(
                 pred=str(pred),
                 metric=metric_name,
                 score_template=ScoreBinary,
-                context=context_val,
+                context=context,
             )
             score = int(rating.score)
             reason = rating.reason

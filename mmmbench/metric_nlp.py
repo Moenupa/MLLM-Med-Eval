@@ -1,4 +1,3 @@
-import os.path as osp
 import sys
 import warnings
 
@@ -7,7 +6,7 @@ from rouge import Rouge
 from sklearn.metrics import accuracy_score
 
 from .constants import GT_KEY
-from .io import read_answers
+from .io import read_answers, unique_model_id
 from .metrics import ModelFreeMetric
 
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -57,7 +56,7 @@ def compute_nlp_metrics(
 
     meta_info = {
         "json_path": json_path,
-        "model": f"{osp.dirname(json_path)}_{model_name}".replace("output_", ""),
+        "model": unique_model_id(json_path, model_name),
     }
     if metric_name == ModelFreeMetric.ExactMatch:
         return meta_info | {

@@ -154,3 +154,9 @@ def form_dataframe(results: list[dict]) -> pd.DataFrame:
     df = df.round(1)
 
     return df
+
+
+def unique_model_id(path: str, model_name: str) -> str:
+    # make a unique id from path and model_name
+    # path is unique, model_name maybe not
+    return f"{path.split('/')[-2]}/{model_name}"
