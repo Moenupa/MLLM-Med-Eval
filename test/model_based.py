@@ -1,6 +1,6 @@
+import os
 import pickle as pkl
 import sys
-import os
 from glob import glob
 
 from tqdm.contrib.concurrent import process_map

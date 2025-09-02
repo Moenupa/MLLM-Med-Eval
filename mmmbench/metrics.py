@@ -54,7 +54,7 @@ def get_prompt(gpt_metric_name: GPTMetric) -> str:
 
 _BASE_REASON_DESC = "Brief justification for the score"
 _SCORE_LIKERT_DESC = "Integer score from 1 (worst) to 5 (best)"
-_SCORE_BINARY_DESC = "Integer score 0 = worst, 1 = best"
+_SCORE_BINARY_DESC = "Integer score 0 = incorrect, 1 = correct"
 
 
 class BaseScore(BaseModel):
@@ -83,7 +83,7 @@ class ScoreBinaryWithReason(BaseScore):
 
 
 _HEADER_LIKERT = "You are a strict grader. Compare the model prediction to the ground truth. Return a structured assessment with a score from 1 (worst) to 5 (best)"
-_HEADER_BINARY = "You are a strict grader. Compare the model prediction to the ground truth. Return a structured assessment with a score from 0 (worst) to 1 (best)"
+_HEADER_BINARY = "You are a strict grader. Compare the model prediction to the ground truth. Return a structured assessment with a score from 0 = incorrect to 1 = correct"
 
 
 def get_header(score_template: BaseScore):

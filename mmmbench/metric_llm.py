@@ -54,6 +54,7 @@ def compute_model_based_metric(
                     "metric": metric_name.value,
                     "score": score,
                     "reason": reason,
+                    "context": context,
                     "gt": gt,
                     "pred": pred,
                 },

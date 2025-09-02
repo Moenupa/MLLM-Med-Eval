@@ -6,10 +6,10 @@ import pandas as pd
 
 SRC_LINES = {
     osp.basename(fp).split(".")[0]: len(json.load(open(fp)))
-    for fp in glob("output/*.json")
+    for fp in glob("output/*/*.json")
 }
 
-for target_file in glob("output*/.cache_gpt_metrics/*"):
+for target_file in glob("output/*/.cache_gpt_metrics/*"):
     filename = osp.basename(target_file).split(".")[0]
     src_lines = SRC_LINES[filename]
     df = pd.read_json(target_file, lines=True)

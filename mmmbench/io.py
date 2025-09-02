@@ -143,7 +143,7 @@ def form_dataframe(results: list[dict]) -> pd.DataFrame:
                 out[k][metric.value] = None
 
     # sort keys by 1. dataset name, 2. model prefix, 3. model name length
-    out = dict(sorted(out.items(), key=lambda x: (x[0][0], x[0][1][:6], len(x[0][1]))))
+    out = dict(sorted(out.items(), key=lambda x: (x[0][0], x[0][1][:10], len(x[0][1]))))
 
     # use na if a metric is not available
     df = pd.DataFrame.from_dict(out, orient="index")

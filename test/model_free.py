@@ -10,17 +10,19 @@ from mmmbench.metric_nlp import ModelFreeMetric, compute_nlp_metrics
 
 
 def compute_metrics():
+    jobs = [
+        (each_json, model_name, metric_name)
+        for metric_name in ModelFreeMetric
+        for json_regex, model_names in PATH_RE_TO_MODEL_MAPPING.items()
+        for each_json in glob(json_regex)
+        for model_name in model_names
+    ]
+
     # model free metrics
     results: list[dict] = process_map(
         compute_nlp_metrics,
-        [
-            (each_json, model_name, metric_name)
-            for metric_name in ModelFreeMetric
-            for json_regex, model_names in PATH_RE_TO_MODEL_MAPPING.items()
-            for each_json in glob(json_regex)
-            for model_name in model_names
-        ],
-        max_workers=os.cpu_count() // 2 or 1,
+        jobs,
+        max_workers=max(len(jobs), os.cpu_count()),
         chunksize=1,
         desc="Computing metrics",
         unit="metric",
