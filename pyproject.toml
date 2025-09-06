@@ -1,7 +1,7 @@
 [project]
-name = "mmmbench"
+name = "MMMBench"
 version = "0.1.0"
-description = "Add your description here"
+description = "MMMBench: A parallel processing wrapper for Pred V.S. GT evaluation"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
