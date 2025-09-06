@@ -4,10 +4,10 @@ from .llm_rater import LLMRater, append_cache, cache_file, load_cache, make_key
 from .metrics import GPTMetric, ScoreBinary
 
 
-def compute_model_based_metric(
+def compute_gpt_metrics(
     args: tuple[str, str, GPTMetric, int | None],
 ) -> dict:
-    json_path, model_name, metric_name, worker_id = args
+    json_path, model_name, metric_name, worker_id, *_ = args
     assert metric_name is not None and metric_name in GPTMetric
 
     df = read_answers(json_path)

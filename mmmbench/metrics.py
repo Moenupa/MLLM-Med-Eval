@@ -11,7 +11,7 @@ class ModelFreeMetric(StrEnum):
 
 
 # %% metrics like BERTscore
-class ModelbasedMetric(StrEnum):
+class ModelBasedMetric(StrEnum):
     pass
 
 

@@ -45,7 +45,7 @@ def compute_rouge(gts: list[str], preds: list[str]) -> float | None:
 def compute_nlp_metrics(
     args: tuple[str, str, ModelFreeMetric],
 ) -> dict:
-    json_path, model_name, metric_name = args
+    json_path, model_name, metric_name, *_ = args
 
     assert metric_name is not None and metric_name in ModelFreeMetric
 
